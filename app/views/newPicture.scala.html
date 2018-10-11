@@ -1,0 +1,13 @@
+@(myForm:Form[Picture])
+@import helper._;
+
+<h1>New Picture</h1>
+@helper.form(action = routes.Application.listAdd(), 'enctype->"multipart/form-data"){
+    @inputText(myForm("id"), '_label->"รหัส", 'size->"10")
+    @inputText(myForm("name"), '_label->"ชื่อ", 'size->"50")
+    @textarea(myForm("description"), '_label->"รายละเอียด", 'cols->"50", 'rows->"5")
+
+    เลือกไฟล์: <input type="file" name="myfile"> <br>
+    <input type="submit" value="กดโล๊ด">
+    <input type="reset" value="เคลียร์เบิ่ง">
+}

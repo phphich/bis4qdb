@@ -1,0 +1,18 @@
+@(departmentList:List[Department])
+
+
+<table class="table table-Stripe">
+    @for(department<-departmentList){
+        <tr>
+            <td>@department.getId </td>
+            <td>@department.getThName </td>
+            <td>@department.getEngName </td>
+            <td>@department.getYear </td>
+            <td>
+                <a href="/pushToBasket/@department.getId()" class="btn btn-success">
+                    Order
+                </a>
+            </td>
+        </tr>
+    }
+</table>

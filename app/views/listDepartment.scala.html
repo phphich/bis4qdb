@@ -1,0 +1,45 @@
+@(departmentList:List[Department])
+<br>
+<h1>ข้อมูลสาขาวิชา </h1>
+<table class="table table-hover" style="background-color:honeydew;color: blue">
+    <tr style="background-color: #1b6d85;color: white">
+        <th>รหัสสาขา</th>
+        <th>ชื่อสาขา(ภาษาไทย)</th>
+        <th>ชื่อสาขา(ภาษาอังกฤษ)</th>
+        <th>ระดับการศึกษา</th>
+        <th>จำนวนปีที่ศึกษา</th>
+        <th>สังกัดคณะ</th>
+
+        <th><a href="/inputDepartment" class="btn btn-success" style="width: 75px">
+            <span class="glyphicon glyphicon-plus-sign"></span>
+        </a></th>
+    </tr>
+    @for(department <- departmentList){
+        <tr>
+            <td>@department.getId </td>
+            <td>@department.getThName </td>
+            <td>@department.getEngName </td>
+            <td>@department.getLevel </td>
+            <td>@department.getYear </td>
+            <td>@department.getFaculty.getName
+                  (@department.getFaculty.getShotName)
+            </td>
+            <td>
+                <a href="/editDepartment/@department.getId" class="btn btn-primary">
+                    <span class="glyphicon glyphicon-edit"></span>
+                </a>
+                <a href="/deleteDepartment/@department.getId" class="btn btn-danger"
+                onclick="return confirm('โปรดยืนยันการลบข้อมูลสาขาวิชาที่ถูกเลือก')" >
+                    <span class="glyphicon glyphicon-trash"></span>
+                </a>
+
+            </td>
+        </tr>
+    }
+    <tr>
+        <td colspan="5">
+
+            <a href="/" class="btn btn-danger">Home</a>
+        </td>
+    </tr>
+</table>

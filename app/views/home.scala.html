@@ -1,0 +1,15 @@
+<div class="row" STYLE='background-image: url("/assets/images/main_pic.jpg");no-repeat center center fixed' >
+        <h1>Welcome to my dynamic web page </h1>
+        A server-side dynamic web page is a web page whose construction is controlled by an application server <br>
+        processing server-side scripts. In server-side scripting, <br>
+        parameters determine how the assembly of every new web page proceeds, <br>
+        including the setting up of more client-side processing. <br>
+        <br><br>
+        <a href="/sp">Go to second page</a><br>
+    <br><br><br><br><br><br><br><br><br><br>
+        @if(flash.containsKey("permisError")){
+                <b style="color: red;">
+                        @flash.get("permisError")
+                </b>
+        }
+</div>

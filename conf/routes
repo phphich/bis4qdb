@@ -1,0 +1,33 @@
+# Routes
+# This file defines all application routes (Higher priority routes first)
+# ~~~~
+
+# Home page
+GET     /                           controllers.Application.index()
+GET     /sp                         controllers.Application.second()
+GET     /products                   controllers.Application.products()
+
+GET     /showFlower                 controllers.Application.showFlower()
+
+GET     /listPicture                controllers.Application.listPicture()
+GET     /newPicture                 controllers.Application.newPicture()
+POST    /listAdd                    controllers.Application.listAdd()
+GET     /editPicture/:id            controllers.Application.editPicture(id:String)
+POST    /updatePicture              controllers.Application.updatePicture()
+GET     /deletePicture/:id          controllers.Application.deletePicture(id:String)
+
+GET     /listDepartment                controllers.Application.listDepartment()
+GET     /inputDepartment               controllers.Application.inputDepartment()
+POST    /saveDepartment                controllers.Application.saveDepartment()
+GET     /editDepartment/:id            controllers.Application.editDepartment(id:String)
+POST    /updateDepartment              controllers.Application.updateDepartment()
+GET     /deleteDepartment/:id          controllers.Application.deleteDepartment(id:String)
+
+POST    /authen                     controllers.Application.authen()
+GET     /logout                     controllers.Application.logout()
+
+GET     /showProduct                controllers.Application.showProduct()
+GET     /pushToBasket/:id           controllers.Application.pushToBasket(id:String)
+
+# Map static resources from the /public folder to the /assets URL path
+GET     /assets/*file               controllers.Assets.at(path="/public", file)

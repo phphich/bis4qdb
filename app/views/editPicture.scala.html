@@ -1,0 +1,14 @@
+@(myForm:Form[Picture])
+@import helper._;
+
+<h1>Edit Picture</h1>
+@helper.form(action = routes.Application.updatePicture(), 'enctype->"multipart/form-data"){
+    @inputText(myForm("id"), '_label->"รหัส", 'size->"10", 'readonly->"readonly")
+    @inputText(myForm("name"), '_label->"ชื่อ", 'size->"50")
+    @textarea(myForm("description"), '_label->"รายละเอียด", 'cols->"50", 'rows->"5")
+    <img src="/assets/images/@myForm.get.getFilename()" style="width: 100px;height: 100px">
+    เลือกไฟล์: <input type="file" name="myfile"> <br>
+    <input type="hidden" name="filename" value='@myForm("filename").value'>
+    <input type="submit" value="กดโล๊ด">
+    <input type="reset" value="เคลียร์เบิ่ง">
+}
