@@ -2,8 +2,8 @@ package controllers;
 
 import models.*;
 import play.*;
-import play.api.cache.Cache;
 import play.api.templates.Html;
+import play.cache.Cache;
 import play.data.DynamicForm;
 import play.data.Form;
 import play.mvc.*;
@@ -12,6 +12,7 @@ import views.html.*;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class Application extends Controller {
@@ -246,14 +247,90 @@ public class Application extends Controller {
        return showMain(home.render());
    }
 
-  // public static List<Department> departmentList; //รายการสินค้า
-   public static Result showProduct() {
-       departmentList=Department.list();
-       return showMain(showProduct.render(departmentList));
-   }
+  //Cache
+    public static List<Book> bookList= new ArrayList<Book>();
+   public static Book book;
+    public List<OrdersDetail> basketList = new ArrayList<OrdersDetail>();
 
-   public static Result pushToBasket(String id) {
-        return ok();
-   }
+    public static Result showBookSale() {
+        bookList=Book.list();
+        List<Basket> basketList = (List<Basket>) Cache.get("basketList");
 
+        return showMain(showBookSale.render(bookList, basketList));
+    }
+
+    public static Result addOrder(String id ){
+        List<Basket> basketList=new ArrayList<Basket>();
+        boolean found=false;
+
+        if(Cache.get("basketList") != null){
+            basketList.addAll((List<Basket>) Cache.get("basketList"));
+            for(int i=0;i<basketList.size();i++) {
+                if(basketList.get(i).getBook().getId().equals(id)) {
+                    int amount =  basketList.get(i).getAmount();
+                    basketList.get(i).setAmount(amount + 1);
+                    found=true;
+                    break;
+                }
+            }
+        }
+
+        if(found==false) {
+            book = Book.finder.byId(id);
+            basketList.add(new Basket(book,1));
+        }
+
+        Cache.set("basketList", basketList);
+        return redirect("/showBookSale");
+    }
+
+    public static Result removeItem(String id){
+        List<Basket> basketList=new ArrayList<Basket>();
+
+        if(Cache.get("basketList") != null){
+            basketList.addAll((List<Basket>) Cache.get("basketList"));
+            for(int i=0;i<basketList.size();i++) {
+                if(basketList.get(i).getBook().getId().equals(id)) {
+                    basketList.remove(i);
+                    break;
+                }
+            }
+        }
+
+        Cache.set("basketList", basketList);
+        return redirect("/showBookSale");
+    }
+
+    public static Result checkBill(){
+        List<Basket> basketList=new ArrayList<Basket>();
+        if(Cache.get("basketList") != null) {
+            basketList =(List<Basket>) Cache.get("basketList");
+        }
+        return showMain(checkBill.render(basketList));
+    }
+
+    public static Result saveBill(){
+        List<Basket> basketList=new ArrayList<Basket>();
+
+        if(Cache.get("basketList") != null) {
+            Orders orders=new Orders();
+            User user = User.finder.byId(session().get("uid"));
+            orders.setDate(new Date());
+            orders.setUser(user);
+            orders.setStatus("order");
+            orders.create(orders);
+
+            basketList=(List<Basket>) Cache.get("basketList");
+            for(int i=0; i<basketList.size();i++) {
+                OrdersDetail ordersDetail = new OrdersDetail();
+                ordersDetail.setOrders(orders);
+                ordersDetail.setBook(basketList.get(i).getBook());
+                ordersDetail.setAmount(basketList.get(i).getAmount());
+                OrdersDetail.create(ordersDetail);
+
+            }
+        }
+        Cache.remove("basketList");
+        return redirect("/showBookSale");
+    }
 }
